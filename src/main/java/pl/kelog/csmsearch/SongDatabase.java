@@ -12,13 +12,27 @@ import static java.util.stream.Collectors.toList;
 
 class SongDatabase {
     
-    public static final String SEPARATOR = " \\| ";
-    static List<Song> songs = new ArrayList<>();
+    private static final String SEPARATOR = " \\| ";
+    
+    private final List<Song> songs = new ArrayList<>();
     
     public SongDatabase(String databaseFilename) {
         System.out.println("Reading songs from " + databaseFilename + "...");
         
+        readSongsDatabase(databaseFilename).forEach(this::createSong);
+        
+        System.out.println("Reading finished, count = " + songs.size());
+    }
+    
+    public List<Song> findSongByPartOfTitle(String part) {
+        return songs.stream()
+                .filter(song -> Utils.normalize(song.title).contains(part))
+                .collect(toList());
+    }
+    
+    private List<String> readSongsDatabase(String databaseFilename) {
         byte[] content;
+        
         try {
             content = Files.readAllBytes(new File(databaseFilename).toPath());
         } catch (IOException e) {
@@ -27,19 +41,13 @@ class SongDatabase {
         
         String decoded = new String(Base64.getMimeDecoder().decode(content));
         
-        Arrays.stream(decoded.split("\n")).forEach(line -> {
-            String[] split = line.split(SEPARATOR);
-            Song song = new Song(split[1], split[0]);
-            songs.add(song);
-            System.out.println("Added song " + song);
-        });
-        
-        System.out.println("Reading finished, count = " + songs.size());
+        return Arrays.stream(decoded.split("\n")).collect(toList());
     }
     
-    public List<Song> findByPartOfTitle(String part) {
-        return songs.stream()
-                .filter(song -> Utils.normalize(song.title).contains(part))
-                .collect(toList());
+    private void createSong(String line) {
+        String[] split = line.split(SEPARATOR);
+        Song song = new Song(split[1], split[0]);
+        songs.add(song);
+        System.out.println("Added song " + song);
     }
 }

@@ -16,6 +16,7 @@ public class Utils {
         replacements.put("ł", "l");
         replacements.put("ś", "s");
         replacements.put("ń", "n");
+        replacements.put("ć", "c");
     }
     
     public static String normalize(String input) {
