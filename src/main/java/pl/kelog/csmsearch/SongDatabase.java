@@ -1,10 +1,12 @@
 package pl.kelog.csmsearch;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -12,16 +14,17 @@ import static java.util.stream.Collectors.toList;
 
 class SongDatabase {
     
-    private static final String SEPARATOR = " \\| ";
-    
-    private final List<Song> songs = new ArrayList<>();
+    private static final Gson GSON = new Gson();
+    private static final Type GSON_SONGS_LIST_TYPE = new TypeToken<List<Song>>() {
+    }.getType();
+    private final List<Song> songs;
     
     public SongDatabase(String databaseFilename) {
         System.out.println("Reading songs from " + databaseFilename + "...");
         
-        readSongsDatabase(databaseFilename).forEach(this::createSong);
+        songs = readSongsDatabase(databaseFilename);
         
-        System.out.println("Reading finished, count = " + songs.size());
+        System.out.println("Reading finished, count = " + songs.size() + " songs.");
     }
     
     public List<Song> findSongByPartOfTitle(String part) {
@@ -30,7 +33,7 @@ class SongDatabase {
                 .collect(toList());
     }
     
-    private List<String> readSongsDatabase(String databaseFilename) {
+    private List<Song> readSongsDatabase(String databaseFilename) {
         byte[] content;
         
         try {
@@ -39,15 +42,12 @@ class SongDatabase {
             throw new AssertionError(e);
         }
         
-        String decoded = new String(Base64.getMimeDecoder().decode(content));
+        System.out.println("Loaded " + content.length + " bytes of base64-d data.");
         
-        return Arrays.stream(decoded.split("\n")).collect(toList());
-    }
+        String decodedJson = new String(Base64.getMimeDecoder().decode(content));
+        System.out.println("Decoded " + decodedJson.length() + " bytes of JSON data.");
     
-    private void createSong(String line) {
-        String[] split = line.split(SEPARATOR);
-        Song song = new Song(split[1], split[0]);
-        songs.add(song);
-        System.out.println("Added song " + song);
+        System.out.println("Parsing JSON...");
+        return GSON.fromJson(decodedJson, GSON_SONGS_LIST_TYPE);
     }
 }

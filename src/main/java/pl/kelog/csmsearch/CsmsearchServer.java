@@ -5,6 +5,7 @@ import spark.Response;
 import spark.Spark;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.joining;
 
@@ -21,7 +22,8 @@ public class CsmsearchServer {
     
     public void start(int port) {
         Spark.port(port);
-        
+    
+        Spark.get("/", this::handleRequest);
         Spark.get("/:part", this::handleRequest);
         
         Spark.before((request, response) -> System.out.println("Before request: " + request.ip() + " " + request.url()));
@@ -29,7 +31,7 @@ public class CsmsearchServer {
     }
     
     private String handleRequest(Request request, Response response) {
-        String part = request.params("part");
+        String part = Objects.requireNonNullElse(request.params("part"), "");
         
         System.out.println("Searching for <" + part + ">");
         List<Song> matches = songDatabase.findSongByPartOfTitle(part);
