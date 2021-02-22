@@ -12,10 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -43,8 +40,12 @@ public class Scraper {
         System.out.println("Got _token: " + token);
         
         System.out.println("Logging in as " + EMAIL + "...");
+        Map<String, String> postData = new HashMap<>();
+        postData.put("email", EMAIL);
+        postData.put("password", PASSWORD);
+        postData.put("_token", token);
         Response loginResponse = Jsoup.connect(BASE_URL + "/login")
-                .data(Map.of("email", EMAIL, "password", PASSWORD, "_token", token))
+                .data(postData)
                 .cookies(initialResponse.cookies())
                 .method(Connection.Method.POST)
                 .execute();

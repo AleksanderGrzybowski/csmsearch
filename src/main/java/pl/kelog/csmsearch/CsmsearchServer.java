@@ -5,7 +5,7 @@ import spark.Response;
 import spark.Spark;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.joining;
 
@@ -31,7 +31,7 @@ public class CsmsearchServer {
     }
     
     private String handleRequest(Request request, Response response) {
-        String part = Objects.requireNonNullElse(request.params("part"), "");
+        String part = Optional.ofNullable(request.params("part")).orElse("");
         
         System.out.println("Searching for <" + part + ">");
         List<Song> matches = songDatabase.findSongByPartOfTitle(part);
