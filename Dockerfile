@@ -1,17 +1,10 @@
-FROM openjdk:8-jdk
+FROM node:17.3.0
 
-COPY . /app
-WORKDIR /app
+COPY ./csmsearch /frontend
+WORKDIR /frontend
+RUN npm install && npm run build
 
-RUN ./gradlew clean shadowJar
+FROM httpd:latest
 
-FROM openjdk:8-jre-alpine
+COPY --from=0 /frontend/build/ /usr/local/apache2/htdocs/
 
-COPY --from=0 /app/build/libs/csmsearch-1.0-SNAPSHOT-all.jar /app.jar
-COPY ./docker-entrypoint.sh /
-COPY ./songs-db.b64json /
-RUN chmod +x /docker-entrypoint.sh
-
-WORKDIR /
-
-CMD '/docker-entrypoint.sh'

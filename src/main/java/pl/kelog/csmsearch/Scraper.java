@@ -20,19 +20,20 @@ import java.util.*;
  * then commit the result.
  */
 public class Scraper {
-    
+
     private static final String BASE_URL = "https://csmonline.edu.pl";
-    private static final String EMAIL = "here@is.email";
-    private static final String PASSWORD = "here_is_password";
+    private static final String EMAIL = System.getenv("EMAIL");
+    private static final String PASSWORD = System.getenv("PASSWORD");
+
     private static final int LAST_PAGE_NUMBER = 8;
-    
+    private static final String SONGS_DB_FILENAME = "csmsearch/src/songs.js";
+
     private static final Gson GSON = new Gson();
     static Type GSON_SONG_LIST_TYPE = new TypeToken<List<Song>>() {
     }.getType();
     
     public static void main(String[] args) throws IOException {
-        
-        
+
         // this initial query is required to get magic _token for some reason (I guess it is the PHP framework they use)
         System.out.println("Visiting initial page...");
         Response initialResponse = Jsoup.connect(BASE_URL + "/login").execute();
@@ -68,9 +69,9 @@ public class Scraper {
         }
         
         String serializedJson = new Gson().toJson(songs, GSON_SONG_LIST_TYPE);
+        String songsFileContent = "const data = " + serializedJson + "\nexport default data;";
         
-        String encodedJson = new String(Base64.getMimeEncoder().encode(serializedJson.getBytes()));
-        FileUtils.writeStringToFile(new File(Config.SONGS_DB_FILENAME), encodedJson, Charset.defaultCharset());
+        FileUtils.writeStringToFile(new File(SONGS_DB_FILENAME), songsFileContent, Charset.defaultCharset());
     }
 }
 
