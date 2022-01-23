@@ -4,5 +4,5 @@ Their website has a pretty bad search functionality. So I indexed all links and 
 
 You can try it out via usual `npm start`.
 
-Updating the index of all the links: `EMAIL="heregoes@email.com" PASSWORD="heregoespassword" ./gradlew run`
+Updating the index of all the links (you might have to update `LAST_PAGE_NUMBER` in scraper source): `EMAIL="heregoes@email.com" PASSWORD="heregoespassword" ./gradlew run`
 

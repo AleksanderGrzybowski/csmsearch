@@ -25,7 +25,7 @@ public class Scraper {
     private static final String EMAIL = System.getenv("EMAIL");
     private static final String PASSWORD = System.getenv("PASSWORD");
 
-    private static final int LAST_PAGE_NUMBER = 8;
+    private static final int LAST_PAGE_NUMBER = 9;
     private static final String SONGS_DB_FILENAME = "csmsearch/src/songs.js";
 
     private static final Gson GSON = new Gson();
