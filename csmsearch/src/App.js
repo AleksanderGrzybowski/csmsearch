@@ -36,7 +36,7 @@ class App extends Component {
   handleKeyDown = event => {
      const filteredSongs = this.filterSongs();
      if (event.key === "Enter") {
-         window.location.href = filteredSongs[0].url;
+         window.open(filteredSongs[0].url);
      }
   }
 
