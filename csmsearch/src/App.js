@@ -21,7 +21,8 @@ class App extends Component {
     super(props);
 
     this.state = {
-      text: ''
+      text: '',
+      helpVisible: false
     };
   }
 
@@ -33,10 +34,17 @@ class App extends Component {
      this.setState({text: event.target.value})
   }
 
+  toggleHelpVisible = () => {
+     this.setState({helpVisible: !this.state.helpVisible})
+  }
+
   handleKeyDown = event => {
-     const filteredSongs = this.filterSongs();
+     if (event.key === "Escape") {
+       this.setState({text: ''});
+     }
      if (event.key === "Enter") {
-         window.open(filteredSongs[0].url);
+       const filteredSongs = this.filterSongs();
+       window.open(filteredSongs[0].url);
      }
   }
 
@@ -45,10 +53,22 @@ class App extends Component {
       <li key={song.url}>
         <a href={song.url}>{song.title}</a>
       </li>
-    )
+    );
+
+    const titleText = <p>
+      <b>Lepsza wyszukiwarka CSM Online</b>&nbsp;
+      <u style={{cursor: 'pointer'}} onClick={this.toggleHelpVisible}>jak używać?</u>
+    </p>;
+
+    const helpText = <div>
+      <p>Zacznij pisać (wystarczy fragment tytułu), klawisz ENTER otwiera pierwszy znaleziony wynik na liście, ESC czyści.</p>
+      <p>Niektóre utwory nie mają wideo tutoriali - w takim przypadku pokaże się błąd 404.</p>
+    </div>;
 
     return (
       <div>
+      {titleText}
+      {this.state.helpVisible && helpText}
       <input autoFocus type="text" value={this.state.text} onChange={this.handleTextChange} onKeyDown={this.handleKeyDown} />
       <ul>
           {songs}
