@@ -44,6 +44,7 @@ class App extends Component {
      }
      if (event.key === "Enter") {
        const filteredSongs = this.filterSongs();
+       this.setState({text: ''});
        window.open(filteredSongs[0].url);
      }
   }
