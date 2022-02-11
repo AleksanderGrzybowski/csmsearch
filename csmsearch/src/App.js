@@ -7,6 +7,7 @@ function normalize(text) {
     text = text.replace(/ó/, "o");
     text = text.replace(/ż/, "z");
     text = text.replace(/ź/, "z");
+    text = text.replace(/ź/, "z");
     text = text.replace(/ł/, "l");
     text = text.replace(/ś/, "s");
     text = text.replace(/ń/, "n");
