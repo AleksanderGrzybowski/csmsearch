@@ -2,20 +2,20 @@ import songs from './songs';
 import React, { Component } from 'react';
 
 function normalize(text) {
-    text = text.replace(/ż/, "a");
-    text = text.replace(/Ż/, "z");
-    text = text.replace(/ó/, "o");
-    text = text.replace(/ł/, "l");
-    text = text.replace(/Ł/, "l");
-    text = text.replace(/ć/, "c");
-    text = text.replace(/Ć/, "c");
-    text = text.replace(/ę/, "e");
-    text = text.replace(/ś/, "s");
-    text = text.replace(/Ś/, "s");
-    text = text.replace(/ą/, "a");
-    text = text.replace(/ź/, "z");
-    text = text.replace(/ń/, "n");
-    
+    text = text.replaceAll(/ż/g, "a");
+    text = text.replaceAll(/Ż/g, "z");
+    text = text.replaceAll(/ó/g, "o");
+    text = text.replaceAll(/ł/g, "l");
+    text = text.replaceAll(/Ł/g, "l");
+    text = text.replaceAll(/ć/g, "c");
+    text = text.replaceAll(/Ć/g, "c");
+    text = text.replaceAll(/ę/g, "e");
+    text = text.replaceAll(/ś/g, "s");
+    text = text.replaceAll(/Ś/g, "s");
+    text = text.replaceAll(/ą/g, "a");
+    text = text.replaceAll(/ź/g, "z");
+    text = text.replaceAll(/ń/g, "n");
+
     return text.toLowerCase();
 }
 
