@@ -4,7 +4,7 @@ COPY ./csmsearch /frontend
 WORKDIR /frontend
 RUN npm install && npm run build
 
-FROM httpd:latest
+FROM nginx:1.29.0
 
-COPY --from=0 /frontend/build/ /usr/local/apache2/htdocs/
+COPY --from=0 /frontend/build/ /usr/share/nginx/html
 
